@@ -1,0 +1,18 @@
+{
+    "name": "weavora/mink-extra-context",
+    "description": "Mink Extra Context",
+    "keywords": ["Mink", "Behat", "BDD", "Feature", "Context"],
+    "type": "library",
+
+    "require": {
+        "behat/behat": "*",
+        "behat/mink": "*",
+        "behat/mink-extension": "*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Weavora\\MinkExtra": "src/"
+        }
+    }
+}

@@ -1,0 +1,36 @@
+parameters:
+    mink-extra.context.initializer.class: Weavora\MinkExtra\Context\Initializer\MinkExtraInitializer
+    mink-extra.context.form.class: Weavora\MinkExtra\Context\FormContext
+    mink-extra.context.table.class: Weavora\MinkExtra\Context\TableContext
+    mink-extra.context.page.class: Weavora\MinkExtra\Context\PageContext
+    mink-extra.context.page-area.class: Weavora\MinkExtra\Context\PageAreaContext
+
+    mink-extra.parameters: []
+
+
+services:
+    mink-extra.context.initializer:
+        class: %mink-extra.context.initializer.class%
+        arguments: [%mink-extra.parameters%]
+        tags:
+            - { name: behat.context.initializer }
+
+    mink-extra.context.form:
+        class: %mink-extra.context.form.class%
+        tags:
+            - { name: mink-extra.context, alias: form }
+
+    mink-extra.context.table:
+        class: %mink-extra.context.table.class%
+        tags:
+            - { name: mink-extra.context, alias: table }
+
+    mink-extra.context.page:
+        class: %mink-extra.context.page.class%
+        tags:
+            - { name: mink-extra.context, alias: page }
+
+    mink-extra.context.page-area:
+        class: %mink-extra.context.page-area.class%
+        tags:
+            - { name: mink-extra.context, alias: page-area }
