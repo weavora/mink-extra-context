@@ -12,7 +12,7 @@ This extension requires:
 
 ### Through Composer
 
-1. Define dependencies in your ``composer.json``:
+Step 1. Define dependencies in your ``composer.json``:
 
 ```js
 
@@ -24,7 +24,7 @@ This extension requires:
 }
 ```
 
-2. Install/update your vendors:
+Step 2. Install/update your vendors:
 
 ```bash
 
@@ -36,7 +36,7 @@ This extension requires:
     $ php composer.phar update
 ```
 
-3. Activate mink extra context extension by specifying its class in your ``behat.yml``:
+Step 3. Activate mink extra context extension by specifying its class in your ``behat.yml``:
 
 ```yaml
 
@@ -53,7 +53,7 @@ This extension requires:
 
 ```
 
-4. Add MinkExtraContext to your FeatureContent
+Step 4. Add MinkExtraContext to your FeatureContent
 
 ```php
 
