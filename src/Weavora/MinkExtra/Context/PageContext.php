@@ -15,7 +15,7 @@ class PageContext extends \Behat\MinkExtension\Context\RawMinkContext
     public function waitForPage($event)
     {
         $text = $event->getStep()->getText();
-        if (preg_match('/(follow|press|click|submit|go to)/i', $text)) {
+        if (preg_match('/(follow|press|click|submit|go to|am on)/i', $text)) {
             $this->getSession()->wait(5000,
                 "document.readyState == 'complete'"
             );

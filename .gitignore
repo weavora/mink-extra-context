@@ -1,3 +1,4 @@
 .idea
-tests
+tests/vendor
+tests/composer.lock
 composer.lock

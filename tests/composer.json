@@ -1,0 +1,17 @@
+{
+
+    "require": {
+        "behat/behat": "*",
+        "behat/mink": "*",
+        "behat/mink-extension": "*",
+
+        "behat/mink-browserkit-driver": "*",
+        "behat/mink-selenium2-driver": "*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Weavora\\MinkExtra": "../src/"
+        }
+    }
+}

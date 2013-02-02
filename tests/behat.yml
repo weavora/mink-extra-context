@@ -1,0 +1,12 @@
+default:
+    extensions:
+        Behat\MinkExtension\Extension:
+            base_url: http://mink-extra.test/
+            default_session: 'selenium2'
+            selenium2: ~
+
+        Weavora\MinkExtra\Extension:
+            form: true
+            table: true
+            page: true
+            page_area: true
