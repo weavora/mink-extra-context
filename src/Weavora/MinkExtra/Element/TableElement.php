@@ -59,17 +59,17 @@ class TableElement extends NodeElement
     public function getRow($index)
     {
         $rows = $this->getRows();
-        if (!isset($rows[$index])) {
-            return null;
-        }
-
-        return $rows[$index];
+        return isset($rows[$index]) ? $rows[$index] : null;
     }
 
+    /**
+     * @param $index
+     * @return NodeElement
+     */
     public function getRowElement($index)
     {
         $rows = $this->findAll('css', 'tbody tr');
-        return $rows[$index];
+        return isset($rows[$index]) ? $rows[$index] : null;
     }
 
     public function findRowIndex($search)
@@ -115,5 +115,26 @@ class TableElement extends NodeElement
     public function getColumnIndex($name)
     {
         return array_search($name, $this->getColumns());
+    }
+
+    public function dump()
+    {
+        return $this->dumpHeader() . PHP_EOL . $this->dumpRows();
+    }
+
+    public function dumpHeader()
+    {
+        return $this->dumpRows(array($this->getColumns()));
+    }
+
+    public function dumpRows($rows = array())
+    {
+        $rows = $rows ?: $this->getRows();
+
+        $lines = array();
+        foreach($rows as $row) {
+            $lines[] = '| ' . join(' | ', $row) . ' |';
+        }
+        return join(PHP_EOL, $lines);
     }
 }
