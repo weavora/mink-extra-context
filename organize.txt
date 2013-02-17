@@ -1,0 +1,38 @@
+ # forms & links & buttoms
+
+ When /^(?:|I )press "(?P<button>(?:[^"]|\\")*)"$/
+ When /^(?:|I )follow "(?P<link>(?:[^"]|\\")*)"$/
+ When /^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)"$/
+ When /^(?:|I )fill in "(?P<value>(?:[^"]|\\")*)" for "(?P<field>(?:[^"]|\\")*)"$/
+ When /^(?:|I )fill in the following:$/
+ When /^(?:|I )select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
+ When /^(?:|I )additionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/
+ When /^(?:|I )check "(?P<option>(?:[^"]|\\")*)"$/
+ When /^(?:|I )uncheck "(?P<option>(?:[^"]|\\")*)"$/
+ When /^(?:|I )attach the file "(?P[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
+
+ # text asserts
+ Then /^(?:|I )should see "(?P<text>(?:[^"]|\\")*)"$/
+ Then /^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)"$/
+ Then /^(?:|I )should see text matching (?P<pattern>"(?:[^"]|\\")*")$/
+ Then /^(?:|I )should not see text matching (?P<pattern>"(?:[^"]|\\")*")$/
+
+ Then /^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/
+ Then /^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/
+ Then /^the "(?P<element>[^"]*)" element should contain "(?P<value>(?:[^"]|\\")*)"$/
+ Then /^(?:|I )should see an? "(?P<element>[^"]*)" element$/
+ Then /^(?:|I )should not see an? "(?P<element>[^"]*)" element$/
+
+ # form asserts
+ Then /^the "(?P<field>(?:[^"]|\\")*)" field should contain "(?P<value>(?:[^"]|\\")*)"$/
+ Then /^the "(?P<field>(?:[^"]|\\")*)" field should not contain "(?P<value>(?:[^"]|\\")*)"$/
+ Then /^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should be checked$/
+ Then /^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should not be checked$/
+ Then /^(?:|I )should see (?P<num>\d+) "(?P<element>[^"]*)" elements?$/
+
+ # custom form
+ Given /^I fill form with:$/
+Given /^I should see form with:$/
+Given /^I fill in "(?P<field>(?:[^"]|\\")*)" with:$/
+Given /^the "(?P<field>[^"]*)" field should contain:$/
+ Then /^the "(?P<field>(?:[^"]|\\")*)" multiple field should contain "(?P<value>(?:[^"]|\\")*)"$/
