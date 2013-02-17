@@ -15,6 +15,7 @@ Feature: Table
 
 		When I go to "/table.php"
 		Then I should see table rows:
+			| # | Name   | Some options       |
 			| 1 | Name 1 | Option 1, Option 2 |
 			| 3 | Name 3 | Option 5, Option 6 |
 
@@ -23,10 +24,10 @@ Feature: Table
 		When I go to "/table.php"
 		Then I should see "Option 1, Option 2" in table row with "Name 1"
 		And I should see "Option 3, Option 4" in 2nd table row
-		And "Some Options" should contain "Option 5, Option 6" in table row with "Name 3"
+		And "Some options" should contain "Option 5, Option 6" in table row with "Name 3"
 		And "Name" should contain "Name 2" in 2nd table row
 		And 2nd cell should contain "Name 3" in table row with "Option 5, Option 6"
-		And 3rd cell should contain "Name 1" in 1st table row
+		And 3rd cell should contain "Option 1, Option 2" in 1st table row
 
 	Scenario: It should be easy to follow link in specified row
 

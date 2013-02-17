@@ -4,32 +4,36 @@ namespace Weavora\MinkExtra\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Weavora\MinkExtra\Element\TableElement;
 use Behat\Behat\Exception\PendingException;
 use Behat\Mink\Exception\ExpectationException;
+use Behat\Mink\Session;
+use PHPUnit_Framework_Assert as Assert;
 
 /**
  * Table Context
  *
  * Class provide additional steps to asserts table content
  */
-class TableContext extends \Behat\MinkExtension\Context\RawMinkContext
+class TableContext extends BaseContext
 {
+
+    /**
+     * @param string $table
+     * @return TableElement
+     */
+    protected function findTable($table = '')
+    {
+        $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', 'table');
+        return new TableElement($xpath, $this->getSession());
+    }
+
     /**
      * @Then /^I should see table header:$/
      */
-    public function assertTableHeader(TableNode $headers)
+    public function assertTableHeader(TableNode $expectedHeader)
     {
-        /** @var $targetHeaders NodeElement[] */
-        $targetHeaders = $this->getSession()->getPage()->findAll('css', 'table th');
-        if (count($targetHeaders) != count($headers->getRow(0))) {
-            throw new ExpectationException("Expected " . count($headers->getRow(0)) . " header columns but only " . count($targetHeaders) . " found", $this->getSession());
-        }
-
-        foreach($headers->getRow(0) as $index => $column) {
-            if (trim($targetHeaders[$index]->getText()) != trim($column)) {
-                throw new ExpectationException("Looking for {$column} but {$targetHeaders[$index]->getText()} found", $this->getSession());
-            }
-        }
+        Assert::assertEquals($expectedHeader->getRow(0), $this->findTable()->getColumns());
     }
 
     /**
@@ -37,17 +41,7 @@ class TableContext extends \Behat\MinkExtension\Context\RawMinkContext
      */
     public function assertTableHeaderContains($text)
     {
-        /** @var $targetHeaders NodeElement[] */
-        $targetHeaders = $this->getSession()->getPage()->findAll('css', 'table th');
-
-
-        foreach($targetHeaders as $header) {
-            if (trim($header->getText()) == trim($text)) {
-                return ;
-            }
-        }
-
-        throw new ExpectationException("Can't find {$text} in table header", $this->getSession());
+        Assert::assertContains($text, $this->findTable()->getColumns());
     }
 
     /**
@@ -55,7 +49,13 @@ class TableContext extends \Behat\MinkExtension\Context\RawMinkContext
      */
     public function assertTableRows(TableNode $rows)
     {
-        throw new PendingException();
+        $rows = $rows->getRows();
+        $columns = array_shift($rows);
+        $table = $this->findTable()->getRowsByColumns($columns);
+
+        foreach($rows as $row) {
+            Assert::assertContains($row, $table);
+        }
     }
 
     /**
@@ -63,15 +63,19 @@ class TableContext extends \Behat\MinkExtension\Context\RawMinkContext
      */
     public function assertTableRowContains($text, $search)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->findRow($search);
+
+        Assert::assertNotEmpty($row);
+        Assert::assertContains($text, $row);
     }
 
     /**
-     * @Given /^I should see "([^"]*)" in (\d+)(st|nd|rd)? table row$/
+     * @Given /^I should see "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
      */
     public function assertSpecifiedTableRowContains($text, $rowNumber)
     {
-        throw new PendingException();
+        Assert::assertContains($text, $this->findTable()->getRow($rowNumber - 1));
     }
 
     /**
@@ -79,47 +83,79 @@ class TableContext extends \Behat\MinkExtension\Context\RawMinkContext
      */
     public function assertTableColumnForTableRowContain($column, $text, $search)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->findRow($search);
+        $columnIndex = $table->getColumnIndex($column);
+
+        Assert::assertNotNull($columnIndex);
+        Assert::assertNotNull($row);
+        Assert::assertEquals($text, $row[$columnIndex]);
     }
 
     /**
-     * @Given /^"([^"]*)" should contain "([^"]*)" in (\d+)(st|nd|rd)? table row$/
+     * @Given /^"(?P<column>[^"]*)" should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
      */
     public function assertTableColumnForSpecifiedTableRowContain($column, $text, $rowNumber)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->getRow($rowNumber - 1);
+        $columnIndex = $table->getColumnIndex($column);
+
+        Assert::assertNotNull($columnIndex);
+        Assert::assertNotNull($row);
+        Assert::assertEquals($text, $row[$columnIndex]);
     }
 
     /**
-     * @Given /^(\d+)(st|nd|rd)? cell should contain "([^"]*)" in table row with "([^"]*)"$/
+     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in table row with "(?P<search>[^"]*)"$/
      */
     public function assertSpecifiedTableColumnForTableRowContain($columnNumber, $text, $search)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->findRow($search);
+
+        Assert::assertNotNull($row);
+        Assert::assertContains($text, $row[$columnNumber - 1]);
     }
 
     /**
-     * @Given /^(\d+)rd cell should contain "([^"]*)" in (\d+)st table row$/
+     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
      */
     public function assertSpecifiedTableColumnForSpecifiedTableRowContain($columnNumber, $text, $rowNumber)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->getRow($rowNumber - 1);
+
+        Assert::assertNotNull($row);
+        Assert::assertContains($text, $row[$columnNumber - 1]);
     }
 
     /**
      * @Then /^I follow "([^"]*)" in table row with "([^"]*)"$/
      */
-    public function iFollowInTableRowWith($arg1, $arg2)
+    public function followLinkInTableRow($link, $search)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $rowNumber = $table->findRowIndex($search);
+
+        Assert::assertNotNull($rowNumber);
+
+        $row = $table->getRowElement($rowNumber);
+        Assert::assertNotNull($row);
+
+        $row->clickLink($link);
     }
 
     /**
-     * @Given /^I follow "([^"]*)" in (\d+)nd table row$/
+     * @Given /^I follow "(?P<link>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
      */
-    public function iFollowInNdTableRow($arg1, $arg2)
+    public function followLinkInSpecifiedTableRow($link, $rowNumber)
     {
-        throw new PendingException();
+        $table = $this->findTable();
+        $row = $table->getRowElement($rowNumber - 1);
+        Assert::assertNotNull($row);
+
+        $row->clickLink($link);
     }
 
     /**
