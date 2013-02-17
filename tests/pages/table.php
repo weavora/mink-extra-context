@@ -2,7 +2,7 @@
 
 <body>
 
-<table>
+<table class="main">
     <thead>
         <tr>
             <th><span>#</span></th>

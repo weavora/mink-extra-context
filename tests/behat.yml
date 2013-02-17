@@ -6,7 +6,16 @@ default:
             selenium2: ~
 
         Weavora\MinkExtra\Extension:
-            form: true
-            table: true
-            page: true
-            page_area: true
+            form:
+                enabled: true
+            table:
+                enabled: true
+                selectors:
+                    main: 'table.main'
+            page:
+                enabled: true
+            page_area:
+                enabled: true
+                selectors:
+                    content: '.content'
+                    menu: '.menu'
