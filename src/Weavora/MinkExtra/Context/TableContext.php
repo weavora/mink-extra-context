@@ -18,9 +18,13 @@ class TableContext extends BaseContext
     public function getSelector($name)
     {
         $selectors = $this->getParameter('selectors');
-        Assert::assertArrayHasKey($name, $selectors);
 
-        return $selectors[$name];
+        if (isset($selectors[$name])) {
+            return $selectors[$name];
+        }
+
+        // if no such table selector defined let's try to find table by class
+        return "table.{$name}";
     }
 
     /**

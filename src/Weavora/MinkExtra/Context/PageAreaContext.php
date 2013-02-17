@@ -15,9 +15,13 @@ class PageAreaContext extends BaseContext
     public function getSelector($name)
     {
         $selectors = $this->getParameter('selectors');
-        Assert::assertArrayHasKey($name, $selectors);
 
-        return $selectors[$name];
+        if (isset($selectors[$name])) {
+            return $selectors[$name];
+        }
+
+        // if no such area defined let's try to it by class
+        return ".{$name}";
     }
 
     /**
