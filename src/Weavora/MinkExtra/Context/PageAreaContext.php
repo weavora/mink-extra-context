@@ -2,52 +2,49 @@
 
 namespace Weavora\MinkExtra\Context;
 
+use PHPUnit_Framework_Assert as Assert;
+
 /**
  * Page Area Context
  *
  * Class help to separate page into different area (e.g. menu, content and etc)
  */
-class PageAreaContext extends \Behat\MinkExtension\Context\RawMinkContext
+class PageAreaContext extends BaseContext
 {
-    private $areas = array();
 
-    public function __construct($areas = array())
+    public function getSelector($name)
     {
-        $this->setAreas($areas);
+        $selectors = $this->getParameter('selectors');
+        Assert::assertArrayHasKey($name, $selectors);
+
+        return $selectors[$name];
     }
 
     /**
-     * Get block CSS-selector
-     *
-     * @param string $block Block name
-     * @return string CSS-selector
+     * @Then /^I should see "(?P<text>[^"]*)" in (?P<area>.*?) area$/
      */
-    private function getAreaSelector($area)
+    public function assertAreaContains($text, $area)
     {
-        $area = trim(strtolower($area));
-
-        if (!array_key_exists($area, $this->areas)) {
-            throw new \Behat\Behat\Exception\PendingException("{$area} is not defined in page context");
-        }
-
-        return $this->areas[$area];
+        $this->assertSession()->elementContains('css', $this->getSelector($area), $this->fixStepArgument($text));
     }
 
     /**
-     * @Then /^I should see "([^"]*)" in (.*?) area$/
+     * @Then /^I should not see "(?P<text>[^"]*)" in (?P<area>.*?) area$/
      */
-    public function iShouldSeeIn($text, $area)
+    public function assertAreaNotContains($text, $area)
     {
-        $this->assertSession()->elementContains('css', $this->getAreaSelector($area), $this->fixStepArgument($text));
+        $this->assertSession()->elementNotContains('css', $this->getSelector($area), $this->fixStepArgument($text));
     }
 
+
     /**
-     * @Then /^I shouldn't see "([^"]*)" in (.*?) area$/
+     * @Then /^I follow "(?P<link>[^"]*)" in (?P<area>.*?) area$/
      */
-    public function iShouldNotSeeIn($text, $area)
+    public function followLink($link, $area)
     {
-        $this->assertSession()->elementNotContains('css', $this->getAreaSelector($area), $this->fixStepArgument($text));
+        $this->getSession()->getPage()->find('css', $this->getSelector($area))->clickLink($link);
     }
+
 
     /**
      * Returns fixed step argument (with \\" replaced back to ").
@@ -59,15 +56,5 @@ class PageAreaContext extends \Behat\MinkExtension\Context\RawMinkContext
     protected function fixStepArgument($argument)
     {
         return str_replace('\\"', '"', $argument);
-    }
-
-    public function setAreas($areas)
-    {
-        $this->areas = $areas;
-    }
-
-    public function getAreas()
-    {
-        return $this->areas;
     }
 }

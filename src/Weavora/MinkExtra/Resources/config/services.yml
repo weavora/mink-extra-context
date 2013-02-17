@@ -30,7 +30,7 @@ services:
         tags:
             - { name: mink-extra.context, alias: page }
 
-    mink-extra.context.page-area:
+    mink-extra.context.page_area:
         class: %mink-extra.context.page-area.class%
         tags:
-            - { name: mink-extra.context, alias: page-area }
+            - { name: mink-extra.context, alias: page_area }

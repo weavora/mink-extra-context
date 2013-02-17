@@ -10,7 +10,7 @@ use Behat\Gherkin\Node\PyStringNode;
  *
  * Class provide additional asserts and steps to fill and validate forms.
  */
-class FormContext extends \Behat\MinkExtension\Context\RawMinkContext
+class FormContext extends BaseContext
 {
     /**
      * @Given /^I fill form with:$/

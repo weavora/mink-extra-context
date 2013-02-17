@@ -10,6 +10,23 @@ use Behat\Mink\Session;
 
 class BaseContext extends \Behat\MinkExtension\Context\RawMinkContext
 {
+    private $parameters = array();
+
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    public function getParameter($name)
+    {
+        return $this->parameters[$name];
+    }
+
     /**
      * Get page session
      *

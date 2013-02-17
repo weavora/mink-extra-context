@@ -28,14 +28,42 @@ class Extension implements ExtensionInterface
      */
     public function getConfig(ArrayNodeDefinition $builder)
     {
-        $builder->
-            children()->
-                booleanNode('form')->defaultTrue()->end()->
-                booleanNode('table')->defaultTrue()->end()->
-                booleanNode('page')->defaultTrue()->end()->
-                booleanNode('page_area')->defaultTrue()->end()->
-            end()->
-        end();
+        $builder
+            ->children()
+                ->arrayNode('form')
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+//                        ->arrayNode('selectors')
+//                            ->prototype('scalar')->end()
+//                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('table')
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->arrayNode('selectors')
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('page_area')
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->arrayNode('selectors')
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('page')
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+//                        ->arrayNode('selectors')
+//                            ->prototype('scalar')->end()
+//                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
 
     }
 

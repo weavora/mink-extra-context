@@ -7,7 +7,7 @@ namespace Weavora\MinkExtra\Context;
  *
  * Class provide hooks to handle complete page loading for sessions with javascript support (e.g. selenium2)
  */
-class PageContext extends \Behat\MinkExtension\Context\RawMinkContext
+class PageContext extends BaseContext
 {
     /**
      * @AfterStep @javascript

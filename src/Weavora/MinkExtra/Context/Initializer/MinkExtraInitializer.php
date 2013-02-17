@@ -6,11 +6,12 @@ use Behat\Behat\Context\ContextInterface;
 use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Context\Initializer\InitializerInterface;
 use Weavora\MinkExtra\Context\MinkExtraContext;
+use Weavora\MinkExtra\Context\BaseContext;
 
 class MinkExtraInitializer implements InitializerInterface
 {
     /**
-     * @var BehatContext[]
+     * @var BaseContext[]
      */
     private $contexts = array();
 
@@ -32,18 +33,22 @@ class MinkExtraInitializer implements InitializerInterface
     public function initialize(ContextInterface $context)
     {
         foreach($this->getContexts() as $alias => $subContext) {
-            if (isset($this->parameters[$alias]) && $this->parameters[$alias]) {
+            if (isset($this->parameters[$alias]) && $this->parameters[$alias]['enabled']) {
+                $subContext->setParameters($this->parameters[$alias]);
                 $context->useContext($alias, $subContext);
             }
         }
     }
 
+    /**
+     * @return array|\Weavora\MinkExtra\Context\BaseContext[]
+     */
     public function getContexts()
     {
         return $this->contexts;
     }
 
-    public function addContext($alias, BehatContext $context)
+    public function addContext($alias, BaseContext $context)
     {
         $this->contexts[$alias] = $context;
     }

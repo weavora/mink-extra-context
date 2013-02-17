@@ -3,11 +3,8 @@
 namespace Weavora\MinkExtra\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\NodeElement;
 use Weavora\MinkExtra\Element\TableElement;
 use Behat\Behat\Exception\PendingException;
-use Behat\Mink\Exception\ExpectationException;
-use Behat\Mink\Session;
 use PHPUnit_Framework_Assert as Assert;
 
 /**
@@ -18,40 +15,48 @@ use PHPUnit_Framework_Assert as Assert;
 class TableContext extends BaseContext
 {
 
+    public function getSelector($name)
+    {
+        $selectors = $this->getParameter('selectors');
+        Assert::assertArrayHasKey($name, $selectors);
+
+        return $selectors[$name];
+    }
+
     /**
      * @param string $table
      * @return TableElement
      */
     protected function findTable($table = '')
     {
-        $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', 'table');
+        $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', $this->getSelector($table));
         return new TableElement($xpath, $this->getSession());
     }
 
     /**
-     * @Then /^I should see table header:$/
+     * @Then /^I should see (?P<tableName>[\w\d\-]+) table header:$/
      */
-    public function assertTableHeader(TableNode $expectedHeader)
+    public function assertTableHeader($tableName, TableNode $expectedHeader)
     {
-        Assert::assertEquals($expectedHeader->getRow(0), $this->findTable()->getColumns());
+        Assert::assertEquals($expectedHeader->getRow(0), $this->findTable($tableName)->getColumns());
     }
 
     /**
-     * @Given /^I should see "([^"]*)" in table header$/
+     * @Given /^I should see "(?P<text>[^"]*)" in (?P<tableName>[\w\d\-]+) table header$/
      */
-    public function assertTableHeaderContains($text)
+    public function assertTableHeaderContains($text, $tableName)
     {
-        Assert::assertContains($text, $this->findTable()->getColumns());
+        Assert::assertContains($text, $this->findTable($tableName)->getColumns());
     }
 
     /**
-     * @Then /^I should see table rows:$/
+     * @Then /^I should see (?P<tableName>[\w\d\-]+) table rows:$/
      */
-    public function assertTableRows(TableNode $rows)
+    public function assertTableRows($tableName, TableNode $rows)
     {
         $rows = $rows->getRows();
         $columns = array_shift($rows);
-        $table = $this->findTable()->getRowsByColumns($columns);
+        $table = $this->findTable($tableName)->getRowsByColumns($columns);
 
         foreach($rows as $row) {
             Assert::assertContains($row, $table);
@@ -59,11 +64,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Then /^I should see "([^"]*)" in table row with "([^"]*)"$/
+     * @Then /^I should see "(?P<text>[^"]*)" in (?P<tableName>[\w\d\-]+) table row with "(?P<search>[^"]*)"$/
      */
-    public function assertTableRowContains($text, $search)
+    public function assertTableRowContains($text, $search, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->findRow($search);
 
         Assert::assertNotEmpty($row);
@@ -71,19 +76,19 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Given /^I should see "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
+     * @Given /^I should see "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function assertSpecifiedTableRowContains($text, $rowNumber)
+    public function assertSpecifiedTableRowContains($text, $rowNumber, $tableName)
     {
-        Assert::assertContains($text, $this->findTable()->getRow($rowNumber - 1));
+        Assert::assertContains($text, $this->findTable($tableName)->getRow($rowNumber - 1));
     }
 
     /**
-     * @Given /^"([^"]*)" should contain "([^"]*)" in table row with "([^"]*)"$/
+     * @Given /^"(?P<column>[^"]*)" should contain "(?P<text>[^"]*)" in (?P<tableName>[\w\d\-]+) table row with "(?P<search>[^"]*)"$/
      */
-    public function assertTableColumnForTableRowContain($column, $text, $search)
+    public function assertTableColumnForTableRowContain($column, $text, $search, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->findRow($search);
         $columnIndex = $table->getColumnIndex($column);
 
@@ -93,11 +98,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Given /^"(?P<column>[^"]*)" should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
+     * @Given /^"(?P<column>[^"]*)" should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function assertTableColumnForSpecifiedTableRowContain($column, $text, $rowNumber)
+    public function assertTableColumnForSpecifiedTableRowContain($column, $text, $rowNumber, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->getRow($rowNumber - 1);
         $columnIndex = $table->getColumnIndex($column);
 
@@ -107,11 +112,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in table row with "(?P<search>[^"]*)"$/
+     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in (?P<tableName>[\w\d\-]+) table row with "(?P<search>[^"]*)"$/
      */
-    public function assertSpecifiedTableColumnForTableRowContain($columnNumber, $text, $search)
+    public function assertSpecifiedTableColumnForTableRowContain($columnNumber, $text, $search, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->findRow($search);
 
         Assert::assertNotNull($row);
@@ -119,11 +124,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
+     * @Given /^(?P<columnNumber>\d+)(st|nd|rd|th)? cell should contain "(?P<text>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function assertSpecifiedTableColumnForSpecifiedTableRowContain($columnNumber, $text, $rowNumber)
+    public function assertSpecifiedTableColumnForSpecifiedTableRowContain($columnNumber, $text, $rowNumber, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->getRow($rowNumber - 1);
 
         Assert::assertNotNull($row);
@@ -131,11 +136,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Then /^I follow "([^"]*)" in table row with "([^"]*)"$/
+     * @Then /^I follow "(?P<link>[^"]*)" in (?P<tableName>[\w\d\-]+) table row with "(?P<search>[^"]*)"$/
      */
-    public function followLinkInTableRow($link, $search)
+    public function followLinkInTableRow($link, $search, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $rowNumber = $table->findRowIndex($search);
 
         Assert::assertNotNull($rowNumber);
@@ -147,11 +152,11 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Given /^I follow "(?P<link>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? table row$/
+     * @Given /^I follow "(?P<link>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function followLinkInSpecifiedTableRow($link, $rowNumber)
+    public function followLinkInSpecifiedTableRow($link, $rowNumber, $tableName)
     {
-        $table = $this->findTable();
+        $table = $this->findTable($tableName);
         $row = $table->getRowElement($rowNumber - 1);
         Assert::assertNotNull($row);
 
@@ -159,33 +164,33 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @Then /^I check table row with "([^"]*)"$/
+     * @Then /^I check (?P<tableName>[\w\d\-]+) table row with "(?P<search>[^"]*)"$/
      */
-    public function iCheckTableRowWith($arg1)
+    public function iCheckTableRowWith($search, $tableName)
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^I check (\d+)nd table row$/
+     * @Given /^I check (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function iCheckNdTableRow($arg1)
+    public function iCheckNdTableRow($rowNumber, $tableName)
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^I check "([^"]*)" in table row with name "([^"]*)"$/
+     * @Given /^I check "(?P<label>[^"]*)" in (?P<tableName>[\w\d\-]+) table row with name "(?P<search>[^"]*)"$/
      */
-    public function iCheckInTableRowWithName($arg1, $arg2)
+    public function iCheckInTableRowWithName($label, $tableName, $search)
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^I check "([^"]*)" in (\d+)rd table row$/
+     * @Given /^I check "(?P<label>[^"]*)" in (?P<rowNumber>\d+)(st|nd|rd|th)? (?P<tableName>[\w\d\-]+) table row$/
      */
-    public function iCheckInRdTableRow($arg1, $arg2)
+    public function iCheckInRdTableRow($label, $rowNumber, $tableName)
     {
         throw new PendingException();
     }
