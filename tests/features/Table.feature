@@ -43,3 +43,11 @@ Feature: Table
 		And I check "Label" in main table row with name "Name 2"
 		And I check "Label" in 3rd main table row
 
+	Scenario: Table could be found by class too
+
+		When I go to "/table.php"
+		Then I should see options table rows:
+			| # | Name   | Some options       |
+			| 1 | Name 1 | Option 1, Option 2 |
+			| 3 | Name 3 | Option 5, Option 6 |
+

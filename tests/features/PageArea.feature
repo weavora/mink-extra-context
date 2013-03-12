@@ -9,3 +9,5 @@ Feature: Page Areas
 		And I should not see "Body2" in content area
 
 		Then I follow "Section" in menu area
+
+		And I should see "user1" in users area
