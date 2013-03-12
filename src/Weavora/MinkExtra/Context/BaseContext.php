@@ -38,6 +38,11 @@ class BaseContext extends \Behat\MinkExtension\Context\RawMinkContext
         return parent::getSession($name);
     }
 
+    public function initialize()
+    {
+
+    }
+
 //    public function assertStringEquals($expected, $value)
 //    {
 //        if (trim($expected) != trim($value)) {

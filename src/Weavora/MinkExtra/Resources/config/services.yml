@@ -4,6 +4,7 @@ parameters:
     mink-extra.context.table.class: Weavora\MinkExtra\Context\TableContext
     mink-extra.context.page.class: Weavora\MinkExtra\Context\PageContext
     mink-extra.context.page-area.class: Weavora\MinkExtra\Context\PageAreaContext
+    mink-extra.context.template.class: Weavora\MinkExtra\Context\TemplateContext
 
     mink-extra.parameters: []
 
@@ -11,7 +12,7 @@ parameters:
 services:
     mink-extra.context.initializer:
         class: %mink-extra.context.initializer.class%
-        arguments: [%mink-extra.parameters%]
+        arguments: [%mink-extra.parameters%, @behat.definition.dispatcher]
         tags:
             - { name: behat.context.initializer }
 
@@ -34,3 +35,8 @@ services:
         class: %mink-extra.context.page-area.class%
         tags:
             - { name: mink-extra.context, alias: page_area }
+
+    mink-extra.context.template:
+        class: %mink-extra.context.template.class%
+        tags:
+            - { name: mink-extra.context, alias: template }

@@ -62,6 +62,14 @@ class Extension implements ExtensionInterface
 //                        ->end()
                     ->end()
                 ->end()
+                ->arrayNode('template')
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->arrayNode('templates')
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
 
