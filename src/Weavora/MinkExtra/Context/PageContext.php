@@ -17,7 +17,7 @@ class PageContext extends BaseContext
         $text = $event->getStep()->getText();
         if (preg_match('/(follow|press|click|submit|go to|am on)/i', $text)) {
             $this->getSession()->wait(5000,
-                "document.readyState == 'complete' && $.active == 0"
+                "document.readyState == 'complete' && typeof(window.jQuery) != 'undefined' && window.jQuery.active == 0"
             );
         }
     }
