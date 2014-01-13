@@ -1,6 +1,6 @@
 # Mink Extra Context
 
-Mink Extra Context provide additional contexts for behat/mink
+Mink Extra Context provides additional contexts for behat/mink
 
 ## Installation
 
@@ -10,7 +10,7 @@ This extension requires:
 * Mink 1.4+
 * Mink extension
 
-### Through Composer
+### Via Composer
 
 Step 1. Define dependencies in your ``composer.json``:
 
@@ -36,7 +36,7 @@ Step 2. Install/update your vendors:
     $ php composer.phar update
 ```
 
-Step 3. Activate mink extra context extension by specifying its class in your ``behat.yml``:
+Step 3. Activate a mink extra context extension by specifying its class in your ``behat.yml``:
 
 ```yaml
 
@@ -71,24 +71,24 @@ class FeatureContext extends \Behat\MinkExtension\Context\MinkContext
 
 ## Page Context
 
-Most common issue with browser session when element can't be found because page haven't loaded yet or ajax request is still processing.
-Page context allow you to stop worry about page loading time or ajax requests without hooking features with tons of wait statements.
+The most common issue with a browser session is a situation when an element can't be found because the page haven't been loaded yet or ajax request is still being processed.
+Page context allows you to stop worrying about page loading time or ajax requests with no hooking features but tons of wait statements.
 
-What page context perform is inject special javascript page-wait conditions into every request related step (like click, go to and etc).
+What page context performs is injecting special javascript page-wait conditions into every request related step (like click, go to and etc).
 
 ## Form Context
 
-Filling forms is often annoying task. Form context help you keep your form related features more structurized.
+Filling in forms is often an annoying task. Form context helps you keep your form related features more structured.
 
 Usage examples:
 
-### Fill form
+### Fill in forms
 
 ```gherkin
-	Scenario: All form elements should be properly filled
+	Scenario: All form elements should be properly filled in
 
 		Given I am on "/tests/pages/form.php"
-		When I fill form with:
+		When I fill in the form with:
 			| Text				| text value			|
 			| Checkbox			| YES					|
 			| Select			| Option 2				|
@@ -107,7 +107,7 @@ Usage examples:
 		And the "Checkbox 3" checkbox should be checked
 ```
 
-### Check form
+### Check forms
 
 ```gherkin
 	Scenario: All form elements should be properly asserted
@@ -123,7 +123,7 @@ Usage examples:
 		And I check "Checkbox 1"
 		And I check "Checkbox 2"
 
-		Then I should see form with:
+		Then I should see the form with:
 			| Text				| text value			|
 			| Checkbox			| YES					|
 			| Select			| Option 2				|
@@ -136,7 +136,7 @@ Usage examples:
 ### Textareas
 
 ```gherkin
-	Scenario: It should be possible put multiline value to textarea
+	Scenario: It should be possible to set a multiline value to textarea
 		Given I am on "/tests/pages/form.php"
 
 		When I fill in "Textarea" with:
@@ -146,7 +146,7 @@ Usage examples:
 		Line 3
 		"""
 
-		Then the "Textarea" field should contain:
+		The "Textarea" field should contain:
 		"""
 		Line 1
 		Line 2
@@ -154,18 +154,18 @@ Usage examples:
 		"""
 ```
 
-### Multiple select values asserts
+### Multiple select value asserts
 
 ```gherkin
-	Scenario: Select field with multiple attribute should be properly asserted
+	Scenario: A select field with multiple attributes should be properly asserted
 
 		Given I am on "/form.php"
 		When I select "MOption 1" from "Multiple Select"
 		And I additionally select "MOption 3" from "Multiple Select"
-		Then the "Multiple Select" multiple field should contain "1,3"
+		The "Multiple Select" multiple field should contain "1,3"
 ```
 
 ### Notes
 
-1. Extension uses standard selectors to find fields. So you can use label selectors (like Title or Content) or name selectors (like post_form[title] or post_form[content])
-2. Extension support all field types like textarea, select, input and etc.
+1. The extension uses standard selectors to find fields. So you can use label selectors (like Title or Content) or name selectors (like post_form[title] or post_form[content])
+2. The extension supports all field types like textarea, select, input,etc.
