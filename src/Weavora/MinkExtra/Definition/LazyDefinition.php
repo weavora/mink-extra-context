@@ -91,6 +91,7 @@ class LazyDefinition implements \Behat\Behat\Definition\DefinitionInterface
     {
         $regexp = "/^" . $this->scenario->getTitle() . "$/is";
         $regexp = preg_replace("/(<.*?>)/is", "(?P$1.*?)", $regexp);
+
         return $regexp;
     }
 
@@ -109,7 +110,7 @@ class LazyDefinition implements \Behat\Behat\Definition\DefinitionInterface
         preg_match($this->getRegex(), $this->getMatchedText(), $matches);
 
         $replacements = array();
-        foreach($matches as $key => $value) {
+        foreach ($matches as $key => $value) {
             if (!is_numeric($key)) {
                 $replacements["<{$key}>"] = $value;
             }
@@ -117,7 +118,7 @@ class LazyDefinition implements \Behat\Behat\Definition\DefinitionInterface
 
         $steps = array();
 
-        foreach($this->scenario->getSteps() as $stepOutline) {
+        foreach ($this->scenario->getSteps() as $stepOutline) {
             /** @var $step StepNode */
             $step = clone $stepOutline;
             $step->setText(strtr($step->getText(), $replacements));
@@ -141,7 +142,6 @@ class LazyDefinition implements \Behat\Behat\Definition\DefinitionInterface
     {
         return new \ReflectionMethod($this, 'callback');
     }
-
 
     public function getPath()
     {

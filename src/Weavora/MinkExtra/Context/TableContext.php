@@ -28,12 +28,13 @@ class TableContext extends BaseContext
     }
 
     /**
-     * @param string $table
+     * @param  string       $table
      * @return TableElement
      */
     protected function findTable($table = '')
     {
         $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('css', $this->getSelector($table));
+
         return new TableElement($xpath, $this->getSession());
     }
 
@@ -65,7 +66,7 @@ class TableContext extends BaseContext
         $table = $this->findTable($tableName);
         $selectedRows = $table->getRowsByColumns($columns);
 
-        foreach($rows as $index => $row) {
+        foreach ($rows as $index => $row) {
             Assert::assertContains($row, $selectedRows, "Couldn't find row #" . ($index + 1) . " in table: " . PHP_EOL . $table->dumpRows($selectedRows));
         }
     }

@@ -3,13 +3,10 @@
 namespace Weavora\MinkExtra\Context\Initializer;
 
 use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Context\Initializer\InitializerInterface;
 use Behat\Behat\Definition\DefinitionDispatcher;
 use Weavora\MinkExtra\Context\MinkExtraContext;
 use Weavora\MinkExtra\Context\BaseContext;
-
-use Behat\Behat\Context\Step;
 
 class MinkExtraInitializer implements InitializerInterface
 {
@@ -41,7 +38,7 @@ class MinkExtraInitializer implements InitializerInterface
     public function initialize(ContextInterface $context)
     {
 
-        foreach($this->getContexts() as $alias => $subContext) {
+        foreach ($this->getContexts() as $alias => $subContext) {
             if (isset($this->parameters[$alias]) && $this->parameters[$alias]['enabled']) {
                 $subContext->setParameters($this->parameters[$alias]);
                 if ($subContext instanceof \Weavora\MinkExtra\Definition\DefinitionDispatcherAwareInterface) {
