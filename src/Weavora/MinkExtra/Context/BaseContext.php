@@ -2,9 +2,6 @@
 
 namespace Weavora\MinkExtra\Context;
 
-use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\NodeElement;
-use Behat\Behat\Exception\PendingException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Session;
 
@@ -30,7 +27,7 @@ class BaseContext extends \Behat\MinkExtension\Context\RawMinkContext
     /**
      * Get page session
      *
-     * @param string|null $name
+     * @param  string|null $name
      * @return Session
      */
     public function getSession($name = null)

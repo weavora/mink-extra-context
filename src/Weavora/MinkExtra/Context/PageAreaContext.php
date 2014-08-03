@@ -2,8 +2,6 @@
 
 namespace Weavora\MinkExtra\Context;
 
-use PHPUnit_Framework_Assert as Assert;
-
 /**
  * Page Area Context
  *

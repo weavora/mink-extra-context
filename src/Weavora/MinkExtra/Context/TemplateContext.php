@@ -2,7 +2,6 @@
 
 namespace Weavora\MinkExtra\Context;
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Parser;
 
 use Behat\Behat\Definition\DefinitionDispatcher;
@@ -19,7 +18,6 @@ class TemplateContext extends BaseContext implements \Weavora\MinkExtra\Definiti
      * @var DefinitionDispatcher
      */
     protected $definitionDispatcher = null;
-
 
     public function initialize()
     {
@@ -46,20 +44,20 @@ class TemplateContext extends BaseContext implements \Weavora\MinkExtra\Definiti
         $lexer = new \Behat\Gherkin\Lexer($keywords);
         $parser = new Parser($lexer);
 
-        foreach($this->getParameter('templates') as $template) {
-            foreach(glob($template) as $file) {
+        foreach ($this->getParameter('templates') as $template) {
+            foreach (glob($template) as $file) {
                 /** @var $feature \Behat\Gherkin\Node\FeatureNode */
                 $feature = $parser->parse(file_get_contents($file));
 
                 /** @var $scenario \Behat\Gherkin\Node\ScenarioNode */
-                foreach($feature->getScenarios() as $scenario) {
+                foreach ($feature->getScenarios() as $scenario) {
                     $this->definitionDispatcher->addDefinition(new \Weavora\MinkExtra\Definition\LazyDefinition($scenario));
                 }
             }
         }
 
-
         $this->initialized = true;
+
         return true;
     }
 

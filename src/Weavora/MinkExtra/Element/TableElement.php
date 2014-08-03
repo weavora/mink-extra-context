@@ -25,10 +25,11 @@ class TableElement extends NodeElement
     {
         if (is_null($this->columns)) {
             $this->columns = array();
-            foreach($this->getHeader() as $column) {
+            foreach ($this->getHeader() as $column) {
                 $this->columns[] = $column->getText();
             }
         }
+
         return $this->columns;
     }
 
@@ -45,20 +46,22 @@ class TableElement extends NodeElement
     {
         if (is_null($this->rows)) {
             $this->rows = array();
-            foreach($this->findAll('css', 'tbody tr') as $row) {
+            foreach ($this->findAll('css', 'tbody tr') as $row) {
                 $rowColumns = array();
-                foreach($row->findAll('css', 'td') as $cell) {
+                foreach ($row->findAll('css', 'td') as $cell) {
                     $rowColumns[] = $cell->getText();
                 }
                 $this->rows[] = $rowColumns;
             }
         }
+
         return $this->rows;
     }
 
     public function getRow($index)
     {
         $rows = $this->getRows();
+
         return isset($rows[$index]) ? $rows[$index] : null;
     }
 
@@ -69,18 +72,20 @@ class TableElement extends NodeElement
     public function getRowElement($index)
     {
         $rows = $this->findAll('css', 'tbody tr');
+
         return isset($rows[$index]) ? $rows[$index] : null;
     }
 
     public function findRowIndex($search)
     {
-        foreach($this->getRows() as $index => $row) {
-            foreach($row as $cell) {
+        foreach ($this->getRows() as $index => $row) {
+            foreach ($row as $cell) {
                 if (trim($cell) == trim($search)) {
                     return $index;
                 }
             }
         }
+
         return null;
     }
 
@@ -101,14 +106,15 @@ class TableElement extends NodeElement
         }
 
         $data = array();
-        foreach($this->getRows() as $row) {
+        foreach ($this->getRows() as $row) {
             $namedRow = array();
-            foreach($columns as $key => $column) {
+            foreach ($columns as $key => $column) {
                 $index = ($named ? $column : $key);
                 $namedRow[$index] = $row[$this->getColumnIndex($column)];
             }
             $data[] = $namedRow;
         }
+
         return $data;
     }
 
@@ -132,9 +138,10 @@ class TableElement extends NodeElement
         $rows = $rows ?: $this->getRows();
 
         $lines = array();
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             $lines[] = '| ' . join(' | ', $row) . ' |';
         }
+
         return join(PHP_EOL, $lines);
     }
 }

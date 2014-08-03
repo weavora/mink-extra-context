@@ -94,11 +94,11 @@ class FormContext extends BaseContext
 
                 $options = array();
                 $optionNodes = $this->getSession()->getDriver()->find($node->getXpath() . "/option");
-                foreach($optionNodes as $optionNode) {
+                foreach ($optionNodes as $optionNode) {
                     $options[$optionNode->getValue()] = $optionNode->getText();
                     $options[$optionNode->getText()] = $optionNode->getText();
                 }
-                foreach($actual as $index => $optionValue) {
+                foreach ($actual as $index => $optionValue) {
                     if (isset($options[$optionValue])) {
                         $actual[$index] = $options[$optionValue];
                     }
@@ -108,6 +108,7 @@ class FormContext extends BaseContext
                     $option = $this->fixStepArgument(trim($option));
                     $this->assertSession()->checkboxChecked($option);
                 }
+
                 return true;
             } else {
                 $actual = $node->getValue();
