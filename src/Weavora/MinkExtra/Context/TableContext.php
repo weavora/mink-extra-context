@@ -79,7 +79,7 @@ class TableContext extends BaseContext
         $table = $this->findTable($tableName);
         $row = is_numeric($row) ? $table->getRow($row - 1) : $table->findRow($row);
 
-        Assert::assertNotEmpty($row, "Couldn't find row {$row} in table: " . PHP_EOL . $table->dump());
+        Assert::assertNotEmpty($row, "Couldn't find row ". is_null($row) ? '' : implode($row, ' | ') ." in table: " . PHP_EOL . $table->dump());
         Assert::assertContains($text, $row, "Couldn't find {$text} in row " . $table->dumpRows(array($row)));
     }
 
@@ -95,7 +95,7 @@ class TableContext extends BaseContext
         $row = is_numeric($row) ? $table->getRow($row - 1) : $table->findRow($row);
         $column = is_numeric($column) ? $column - 1 : $table->getColumnIndex($column);
 
-        Assert::assertNotNull($row, "Couldn't find row {$row} in table: " . PHP_EOL . $table->dump());
+        Assert::assertNotNull($row, "Couldn't find row ". is_null($row) ? '' : implode($row, ' | ')  ." in table: " . PHP_EOL . $table->dump());
         Assert::assertNotNull($column, "Couldn't find column {$column} in table header: " . PHP_EOL . $table->dumpHeader());
         Assert::assertEquals($text, $row[$column], "Couldn't find {$text} in column with '{$row[$column]}'");
     }
@@ -115,6 +115,15 @@ class TableContext extends BaseContext
         Assert::assertNotNull($row);
 
         $row->clickLink($link);
+    }
+
+    /**
+     * @Then /^print (?P<tableName>[\w\d\-]+) table$/
+     */
+    public function printTable($tableName)
+    {
+        $table = $this->findTable($tableName);
+        echo $table->dump(). PHP_EOL;
     }
 
     /**
