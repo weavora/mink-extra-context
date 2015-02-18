@@ -19,7 +19,7 @@ Step 1. Define dependencies in your ``composer.json``:
 {
     "require": {
         ...
-        "weavora/mink-extra-context": "*"
+        "weavora/mink-extra-context": "dev-master"
     }
 }
 ```
