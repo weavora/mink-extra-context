@@ -53,7 +53,7 @@ Step 3. Activate a mink extra context extension by specifying its class in your 
 
 ```
 
-Step 4. Add MinkExtraContext to your FeatureContent
+Step 4. Add MinkExtraContext to your FeatureContext
 
 ```php
 
